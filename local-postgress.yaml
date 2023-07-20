@@ -1,80 +1,9 @@
-# sudo apt update
-# sudo apt install postgresql postgresql-contrib
-# sudo systemctl start postgresql.service
-# sudo -i -u postgres
-# psql
-# \q
-# exit
-# sudo -u postgres psql
 
-# - hosts: all
-#   become: true
-# - name: update apt cache
-#   apt:
-#     update_cache: yes
-
-# - name: Install postgresql-contrib
-#   apt:
-#     name: postgres
-#     state: present
-
-# - name: Restart postgre service
-#   service:
-#         name: postgresql-contrib
-#         state: restarted
 
 
 # - name: Install and configure PostgreSQL
 #   hosts: all
 #   become: true
-
-#   tasks:
-#     - name: Update apt cache
-#       apt:
-#         update_cache: yes
-
-#     - name: Install PostgreSQL and contrib packages
-#       apt:
-#         name:
-#           - postgresql
-#           - postgresql-contrib
-#         state: present
-
-#     - name: Start PostgreSQL service
-#       service:
-#         name: postgresql
-#         state: started
-#         enabled: yes
-
-#     - name: Switch to postgres user
-#       become: yes
-#       become_user: postgres
-#       become_method: su
-
-#     - name: Run psql command as postgres user
-#       command: psql -c "\q"
-#       become: yes
-#       become_user: postgres
-#       become_method: su
-
-#     - name: Exit from postgres user
-#       command: exit
-#       become: yes
-#       become_user: postgres
-#       become_method: su
-
-#     - name: Connect to PostgreSQL as postgres user
-#       command: sudo -u postgres psql
-#       become: yes
-#       become_user: postgres
-#       become_method: su
-
----
-# - name: Install and configure PostgreSQL
-#   hosts: all
-#   become: true
-  
-
 
 #   tasks:
 #     # - name: Update apt cache
@@ -94,40 +23,77 @@
 #         state: started
 #         enabled: yes
 
-    # - name: Switch to postgres user and run psql command
-    #   command: sudo -u postgres psql -c "\q"
-
-- name: Install and configure PostgreSQL
+#     - name: Switch to postgres user and run psql command
+#       shell: |
+#         sudo -i -u postgres psql -c "CREATE USER minion WITH SUPERUSER PASSWORD 'alpha';"
+#         sudo -i -u postgres psql -c "CREATE DATABASE adcuratio WITH OWNER minion;"
+#         sudo -i -u postgres psql -d adcuratio -c "\q"
+#         sudo -i -u postgres psql -c "CREATE DATABASE demographics WITH OWNER minion;"
+#         sudo -i -u postgres psql -d demographics -c "\q"
+#         sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE adcuratio TO minion;"
+#         sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE demographics TO minion;"
+---
+- name: Install MongoDB
   hosts: all
-  become: true
+  become: yes
+  # become_method: sudo
+  # vars:
+  #   ansible_become_password: pass
 
   tasks:
-    # - name: Update apt cache
-    #   apt:
-    #     update_cache: yes
+    - name: Check Ubuntu version
+      shell: cat /etc/os-release | grep -oP '(?<=VERSION_CODENAME=).+'
+      register: ubuntu_version_output
+      changed_when: false
 
-    - name: Install PostgreSQL and contrib packages
-      apt:
-        name:
-          - postgresql
-          - postgresql-contrib
+    - name: Set Ubuntu version fact
+      set_fact:
+        ubuntu_version: "{{ ubuntu_version_output.stdout }}"
+
+    - name: Add MongoDB repository key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-4.4.asc
         state: present
 
-    - name: Start PostgreSQL service
+    - name: Add MongoDB repository to sources.list
+      apt_repository:
+        repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_version }}/mongodb-org/4.4 multiverse"
+        state: present
+
+    - name: Install MongoDB
+      apt:
+        name: mongodb-org
+        state: present
+
+    - name: Start MongoDB service
       service:
-        name: postgresql
+        name: mongod
         state: started
+
+    - name: Enable MongoDB service on boot
+      service:
+        name: mongod
         enabled: yes
 
-    - name: Switch to postgres user and run psql command
-      shell: |
-        sudo -i -u postgres psql -c "CREATE USER minion WITH SUPERUSER PASSWORD 'alpha';"
-        sudo -i -u postgres psql -c "CREATE DATABASE adcuratio WITH OWNER minion;"
-        sudo -i -u postgres psql -d adcuratio -c "\q"
-        sudo -i -u postgres psql -c "CREATE DATABASE demographics WITH OWNER minion;"
-        sudo -i -u postgres psql -d demographics -c "\q"
-        sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE adcuratio TO minion;"
-        sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE demographics TO minion;"
+    - name: Check MongoDB connection status
+      command: "mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
+      register: mongo_connection_status
+      changed_when: false
+
+    - name: Display MongoDB connection status
+      debug:
+        var: mongo_connection_status.stdout_lines
+
+    # Add additional tasks for Ubuntu version 22
+    - name: Follow steps for Ubuntu version 22
+      block:
+        # Place your tasks specific to Ubuntu version 22 here
+        # For example:
+        - name: Task 1 for Ubuntu version 22
+          ...
+        - name: Task 2 for Ubuntu version 22
+          ...
+      when: ubuntu_version == "22"
 
 
 
