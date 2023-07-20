@@ -119,15 +119,15 @@
         state: started
         enabled: yes
 
-    # - name: Switch to postgres user and run psql command
-    #   shell: |
-    #     sudo -i -u postgres psql -c "CREATE USER minion WITH SUPERUSER PASSWORD 'alpha';"
-    #     sudo -i -u postgres psql -c "CREATE DATABASE adcuratio WITH OWNER minion;"
-    #     sudo -i -u postgres psql -d adcuratio -c "\q"
-    #     sudo -i -u postgres psql -c "CREATE DATABASE demographics WITH OWNER minion;"
-    #     sudo -i -u postgres psql -d demographics -c "\q"
-    #     sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE adcuratio TO minion;"
-    #     sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE demographics TO minion;"
+    - name: Switch to postgres user and run psql command
+      shell: |
+        sudo -i -u postgres psql -c "CREATE USER minion WITH SUPERUSER PASSWORD 'alpha';"
+        sudo -i -u postgres psql -c "CREATE DATABASE adcuratio WITH OWNER minion;"
+        sudo -i -u postgres psql -d adcuratio -c "\q"
+        sudo -i -u postgres psql -c "CREATE DATABASE demographics WITH OWNER minion;"
+        sudo -i -u postgres psql -d demographics -c "\q"
+        sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE adcuratio TO minion;"
+        sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE demographics TO minion;"
 
 
 
