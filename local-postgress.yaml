@@ -1,0 +1,133 @@
+# sudo apt update
+# sudo apt install postgresql postgresql-contrib
+# sudo systemctl start postgresql.service
+# sudo -i -u postgres
+# psql
+# \q
+# exit
+# sudo -u postgres psql
+
+# - hosts: all
+#   become: true
+# - name: update apt cache
+#   apt:
+#     update_cache: yes
+
+# - name: Install postgresql-contrib
+#   apt:
+#     name: postgres
+#     state: present
+
+# - name: Restart postgre service
+#   service:
+#         name: postgresql-contrib
+#         state: restarted
+
+
+# - name: Install and configure PostgreSQL
+#   hosts: all
+#   become: true
+
+#   tasks:
+#     - name: Update apt cache
+#       apt:
+#         update_cache: yes
+
+#     - name: Install PostgreSQL and contrib packages
+#       apt:
+#         name:
+#           - postgresql
+#           - postgresql-contrib
+#         state: present
+
+#     - name: Start PostgreSQL service
+#       service:
+#         name: postgresql
+#         state: started
+#         enabled: yes
+
+#     - name: Switch to postgres user
+#       become: yes
+#       become_user: postgres
+#       become_method: su
+
+#     - name: Run psql command as postgres user
+#       command: psql -c "\q"
+#       become: yes
+#       become_user: postgres
+#       become_method: su
+
+#     - name: Exit from postgres user
+#       command: exit
+#       become: yes
+#       become_user: postgres
+#       become_method: su
+
+#     - name: Connect to PostgreSQL as postgres user
+#       command: sudo -u postgres psql
+#       become: yes
+#       become_user: postgres
+#       become_method: su
+
+---
+# - name: Install and configure PostgreSQL
+#   hosts: all
+#   become: true
+  
+
+
+#   tasks:
+#     # - name: Update apt cache
+#     #   apt:
+#     #     update_cache: yes
+
+#     - name: Install PostgreSQL and contrib packages
+#       apt:
+#         name:
+#           - postgresql
+#           - postgresql-contrib
+#         state: present
+
+#     - name: Start PostgreSQL service
+#       service:
+#         name: postgresql
+#         state: started
+#         enabled: yes
+
+    # - name: Switch to postgres user and run psql command
+    #   command: sudo -u postgres psql -c "\q"
+
+- name: Install and configure PostgreSQL
+  hosts: all
+  become: true
+
+  tasks:
+    # - name: Update apt cache
+    #   apt:
+    #     update_cache: yes
+
+    - name: Install PostgreSQL and contrib packages
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+        state: present
+
+    - name: Start PostgreSQL service
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    # - name: Switch to postgres user and run psql command
+    #   shell: |
+    #     sudo -i -u postgres psql -c "CREATE USER minion WITH SUPERUSER PASSWORD 'alpha';"
+    #     sudo -i -u postgres psql -c "CREATE DATABASE adcuratio WITH OWNER minion;"
+    #     sudo -i -u postgres psql -d adcuratio -c "\q"
+    #     sudo -i -u postgres psql -c "CREATE DATABASE demographics WITH OWNER minion;"
+    #     sudo -i -u postgres psql -d demographics -c "\q"
+    #     sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE adcuratio TO minion;"
+    #     sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE demographics TO minion;"
+
+
+

@@ -1,0 +1,42 @@
+- hosts: all
+
+  become: true
+  become_method: sudo
+  vars:
+    ansible_become_password: pass
+
+  tasks: 
+
+  # - name: Update package
+  #   apt:
+  #     update_cache: yes
+
+  # - name: upgrade package
+  #   apt:
+  #     upgrade: dist
+
+  # - name: install ffmpeg
+  #   apt:
+  #     name: ffmpeg
+  #     state: present
+
+  - name: ffmpeg version
+    command: ffmpeg -version | grep ffmpeg
+    register: ffmpeg_version
+    # register is used for variable 
+
+  - name: print ffmpeg version
+    debug: 
+      var: ffmpeg_version.stdout_lines[0]
+    # debug use for print command
+
+
+
+      
+      
+
+  
+
+
+
+  

@@ -1,0 +1,129 @@
+---
+# ---
+# - name: Install and configure MongoDB
+#   hosts: all
+#   become: true
+#   vars:
+#     mongodb_version: "4.4"
+#     mongodb_bind_ip: "127.0.0.1"
+#     mongodb_port: 27017
+#     mongodb_auth_user: "test"
+#     mongodb_auth_password: "test"
+#     mongodb_db: "adcuratio_full"
+
+#   tasks:
+#     - name: Import MongoDB public GPG key
+#       command: curl -fsSL https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc | sudo apt-key add -
+#       changed_when: false
+
+#     - name: Add MongoDB repository
+#       blockinfile:
+#         path: /etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list
+#         block: |
+#           deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/{{ mongodb_version }} multiverse
+#       become: true
+
+#     # - name: Update apt cache
+#     #   apt:
+#     #     update_cache: yes
+
+#     - name: Install MongoDB packages
+#       apt:
+#         name: mongodb-org
+#         state: present
+
+#     - name: Edit MongoDB configuration file
+#       lineinfile:
+#         path: /etc/mongod.conf
+#         regexp: "^[#\\s]*security:"
+#         line: "  authorization: enabled"
+#       become: true
+
+#     - name: Update MongoDB port in configuration file
+#       lineinfile:
+#         path: /etc/mongod.conf
+#         regexp: "^port"
+#         line: "port: {{ mongodb_port }}"
+#         state: present
+#       become: true
+
+#     - name: Restart MongoDB service
+#       service:
+#         name: mongod
+#         state: restarted
+
+#     # - name: Create MongoDB user
+#     #   command: mongo --eval "db.createUser({user: '{{ mongodb_auth_user }}', pwd: '{{ mongodb_auth_password }}', roles: [{role: 'userAdminAnyDatabase', db: 'admin'}]})"
+#     #   become: true
+
+#     # - name: Connect to MongoDB and enable authentication
+#     #   command: mongo -u{{ mongodb_auth_user }} -p{{ mongodb_auth_password }} --eval "use admin; db.auth('{{ mongodb_auth_user }}', '{{ mongodb_auth_password }}'); db.getSiblingDB('{{ mongodb_db }}').createUser({user: '{{ mongodb_auth_user }}', pwd: '{{ mongodb_auth_password }}', roles: ['readWrite']})"
+#     #   become: true
+
+    # - name: Restart MongoDB service with authentication enabled
+    #   service:
+    #     name: mongod
+    #     state: restarte
+
+
+# 1. curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+# 2. apt-key list
+# 3. echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+# 4. sudo apt update
+# 5. sudo apt install mongodb-org
+# 6. sudo systemctl start mongod.service
+# 7. sudo systemctl status mongod
+# 8. sudo systemctl enable mongod
+# 9. mongo --eval 'db.runCommand({ connectionStatus: 1 })'
+
+
+
+
+- name: Install MongoDB
+  hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+    ansible_become_password: pass
+
+  
+  
+  tasks:
+    - name: Add MongoDB repository key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-4.4.asc
+        state: present
+
+    - name: Add MongoDB repository to sources.list
+      apt_repository:
+        repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse"
+        state: present
+
+    # - name: Update APT cache
+    #   apt:
+    #     update_cache: yes
+
+    - name: Install MongoDB
+      apt:
+        name: mongodb-org
+        state: present
+
+    - name: Start MongoDB service
+      service:
+        name: mongod
+        state: started
+
+    - name: Enable MongoDB service on boot
+      service:
+        name: mongod
+        enabled: yes
+
+    - name: Check MongoDB connection status
+      command: "mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
+      register: mongo_connection_status
+      changed_when: false
+
+    - name: Display MongoDB connection status
+      debug:
+        var: mongo_connection_status.stdout_lines
+  

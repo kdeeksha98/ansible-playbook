@@ -1,0 +1,60 @@
+
+# - ---
+- name: Install and configure Redis Server
+  hosts: all
+  become: true
+  vars:
+    redis_version: 6.2.5
+    redis_bind_address: 127.0.0.1
+    redis_port: 6379
+    redis_password: Adcuratio123
+
+  tasks:
+  #   - name: Update apt cache
+  #     apt:
+  #       update_cache: yes
+
+    - name: Install Redis Server
+      apt:
+        name: redis-server
+        state: present
+
+    - name: Copy Redis configuration file
+      copy:
+        src: redis.conf
+        dest: /etc/redis/redis.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Set Redis password in configuration file
+      lineinfile:
+        path: /etc/redis/redis.conf
+        line: "requirepass {{ redis_password }}"
+        regexp: "^# requirepass"
+        state: present
+        backup: yes
+
+    - name: Update Redis bind address and port in configuration file
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: "^bind "
+        line: "bind {{ redis_bind_address }}"
+        state: present
+
+    - name: Update Redis port in configuration file
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: "^port "
+        line: "port {{ redis_port }}"
+        state: present
+
+    - name: Restart Redis service
+      service:
+        name: redis-server
+        state: restarted
+
+    - name: Check Redis service status
+      service:
+        name: redis-server
+        state: status
