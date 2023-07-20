@@ -79,6 +79,53 @@
 
 
 
+# - name: Install MongoDB
+#   hosts: all
+#   become: yes
+#   # become_method: sudo
+#   # vars:
+#   #   ansible_become_password: pass
+
+  
+  
+#   tasks:
+#     - name: Add MongoDB repository key
+#       apt_key:
+#         url: https://www.mongodb.org/static/pgp/server-4.4.asc
+#         state: present
+
+#     - name: Add MongoDB repository to sources.list
+#       apt_repository:
+#         repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse"
+#         state: present
+
+#     # - name: Update APT cache
+#     #   apt:
+#     #     update_cache: yes
+
+#     - name: Install MongoDB
+#       apt:
+#         name: mongodb-org
+#         state: present
+
+#     - name: Start MongoDB service
+#       service:
+#         name: mongod
+#         state: started
+
+#     - name: Enable MongoDB service on boot
+#       service:
+#         name: mongod
+#         enabled: yes
+
+#     - name: Check MongoDB connection status
+#       command: "mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
+#       register: mongo_connection_status
+#       changed_when: false
+
+#     - name: Display MongoDB connection status
+#       debug:
+#         var: mongo_connection_status.stdout_lines
 - name: Install MongoDB
   hosts: all
   become: yes
@@ -86,9 +133,16 @@
   # vars:
   #   ansible_become_password: pass
 
-  
-  
   tasks:
+    - name: Check Ubuntu version
+      shell: cat /etc/os-release | grep -oP '(?<=VERSION_CODENAME=).+'
+      register: ubuntu_version_output
+      changed_when: false
+
+    - name: Set Ubuntu version fact
+      set_fact:
+        ubuntu_version: "{{ ubuntu_version_output.stdout }}"
+
     - name: Add MongoDB repository key
       apt_key:
         url: https://www.mongodb.org/static/pgp/server-4.4.asc
@@ -96,12 +150,8 @@
 
     - name: Add MongoDB repository to sources.list
       apt_repository:
-        repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse"
+        repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_version }}/mongodb-org/4.4 multiverse"
         state: present
-
-    # - name: Update APT cache
-    #   apt:
-    #     update_cache: yes
 
     - name: Install MongoDB
       apt:
@@ -126,4 +176,15 @@
     - name: Display MongoDB connection status
       debug:
         var: mongo_connection_status.stdout_lines
-  
+
+    # Add additional tasks for Ubuntu version 22
+    - name: Follow steps for Ubuntu version 22
+      block:
+        # Place your tasks specific to Ubuntu version 22 here
+        # For example:
+        - name: Task 1 for Ubuntu version 22
+        
+        - name: Task 2 for Ubuntu version 22
+          
+      when: ubuntu_version == "22"
+
