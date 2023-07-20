@@ -126,12 +126,10 @@
 #     - name: Display MongoDB connection status
 #       debug:
 #         var: mongo_connection_status.stdout_lines
+---
 - name: Install MongoDB
   hosts: all
   become: yes
-  # become_method: sudo
-  # vars:
-  #   ansible_become_password: pass
 
   tasks:
     - name: Check Ubuntu version
@@ -176,15 +174,4 @@
     - name: Display MongoDB connection status
       debug:
         var: mongo_connection_status.stdout_lines
-
-    # Add additional tasks for Ubuntu version 22
-    - name: Follow steps for Ubuntu version 22
-      block:
-        # Place your tasks specific to Ubuntu version 22 here
-        # For example:
-        - name: Task 1 for Ubuntu version 22
-        
-        - name: Task 2 for Ubuntu version 22
-          
-      when: ubuntu_version == "22"
 
