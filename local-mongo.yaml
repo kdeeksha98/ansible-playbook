@@ -82,9 +82,9 @@
 - name: Install MongoDB
   hosts: all
   become: yes
-  become_method: sudo
-  vars:
-    ansible_become_password: pass
+  # become_method: sudo
+  # vars:
+  #   ansible_become_password: pass
 
   
   
