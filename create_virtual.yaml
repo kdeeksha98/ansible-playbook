@@ -40,13 +40,13 @@
   #   ansible_become_password: pass
 
   tasks:
-  - name: Download pip installer
-    get_url:
-      url: https://bootstrap.pypa.io/get-pip.py
-      dest: /tmp/get-pip.py
-  - name: Install pip
-    shell: |
-      /usr/bin/python /tmp/get-pip.py
+  # - name: Download pip installer
+  #   get_url:
+  #     url: https://bootstrap.pypa.io/get-pip.py
+  #     dest: /tmp/get-pip.py
+  # - name: Install pip
+  #   shell: |
+  #     /usr/bin/python /tmp/get-pip.py
   - 
   - name: Install virtualenv module
     pip:
