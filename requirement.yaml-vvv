@@ -14,7 +14,7 @@
 #   tasks:
 #     - name: Copy requirements.txt to remote host
 #       copy:
-#         src: "{{ requirements_file }}"
+#         src: "{{ requir/home/deeksha/setup-automation/ansible-playbookements_file }}"
 #         dest: "{{ project_path }}/requirements.txt"
 #         mode: "0644"  # Set the correct file permissions for the copied file
 
@@ -25,10 +25,14 @@
   hosts: all
   gather_facts: false
   become: yes
+  
+  become_method: sudo
   vars:
+    ansible_become_password: pass
+  
     user_name: "deeksha"
     project_path: "/home/{{ user_name }}/setup-automation/adcuratio"
-    requirements_file: "/home/deeksha/adcuratio/core-backend/requirements.txt"  # Path to your requirements.txt file on the remote host
+    requirements_file: "/home/deeksha/setup-automation/ansible-playbook/requirements.txt"  # Path to your requirements.txt file on the remote host
 
   tasks:
     - name: Copy requirements.txt to remote host
