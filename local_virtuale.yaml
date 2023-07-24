@@ -86,7 +86,7 @@
         creates: "{{ virtualenv_path }}/bin/activate"
 
     - name: Activate the virtual environment
-      shell: "{{ virtualenv_path }}/bin/activate"
+      shell: "source {{ virtualenv_path }}/bin/activate"
       args:
         executable: /bin/bash
       environment:
