@@ -62,19 +62,14 @@
   become_method: sudo
   vars:
     ansible_become_password: pass
-    
+
     user_name: "deeksha"
     environment_name: "env"
-    project_path: "/home/{{user_name}}/adcuratio"
-    virtualenv_path: "/home/{{user_name}}/setup-automation/adcuratio/{{environment_name}}"
+    project_path: "/home/{{ user_name }}/adcuratio"
+    virtualenv_path: "/home/{{ user_name }}/setup-automation/adcuratio/{{ environment_name }}"
     alias_command: "alias adc='export SERVER_NAME=MASTER && export SERVER_DESC=MASTER && export DEBUG=true && export OPERATOR_ID=1 && source {{ virtualenv_path }}/bin/activate && cd {{ project_path }}/core-backend/'"
 
   tasks:
-    - name: Install python3-pip package
-      apt:
-        name: python3-pip
-        state: present
-
     - name: Install virtualenv package
       pip:
         name: virtualenv
@@ -82,9 +77,7 @@
 
     - name: Install python3 and python3-pip
       apt:
-        name:
-          - python3
-          - python3-pip
+        name: ['python3', 'python3-pip']
         state: present
 
     - name: Create the virtual environment using virtualenv
@@ -92,14 +85,12 @@
       args:
         creates: "{{ virtualenv_path }}/bin/activate"
 
-    # Alternatively, you can use Python's venv module:
-    # - name: Create the virtual environment using Python's venv
-    #   command: "python3 -m venv {{ virtualenv_path }}"
-    #   args:
-    #     creates: "{{ virtualenv_path }}/bin/activate"
-
     - name: Activate the virtual environment
-      shell: "source {{ virtualenv_path }}/bin/activate"
+      shell: "{{ virtualenv_path }}/bin/activate"
+      args:
+        executable: /bin/bash
+      environment:
+        PATH: "{{ virtualenv_path }}/bin:{{ ansible_env.PATH }}"
 
     # Install any required packages using pip within the virtual environment
     # For example, installing required dependencies:
