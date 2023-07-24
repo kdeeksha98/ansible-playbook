@@ -2,14 +2,10 @@
   hosts: all
   gather_facts: false
   become: yes
-  become_method: sudo
   vars:
-    ansible_become_password: pass
-
-  
     user_name: "deeksha"
     project_path: "/home/{{ user_name }}/setup-automation/adcuratio"
-    requirements_file: "/home/deeksha/adcuratio/core-backend/requirements.txt"  # Path to your requirements.txt file on the control machine
+    requirements_file: "/home/deeksha/adcuratio/core-backend/requirements.txt"  # Path to your requirements.txt file on the Ansible Controller
 
   tasks:
     - name: Copy requirements.txt to remote host
@@ -21,4 +17,3 @@
     - name: Install Python dependencies from requirements.txt
       pip:
         requirements: "{{ project_path }}/requirements.txt"
-
