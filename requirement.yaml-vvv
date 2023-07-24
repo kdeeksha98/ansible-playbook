@@ -32,7 +32,7 @@
   
     user_name: "deeksha"
     project_path: "/home/{{ user_name }}/setup-automation/adcuratio"
-    requirements_file: "/home/deeksha/adcuratio/requirement"  # Path to your requirements.txt file on the remote host
+    requirements_file: "/home/deeksha/setup-automation/ansible-playbook/requirement.txt"  # Path to your requirements.txt file on the remote host
 
   tasks:
     - name: Copy requirements.txt to remote host
