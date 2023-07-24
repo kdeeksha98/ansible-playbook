@@ -107,5 +107,5 @@
     - name: Set the alias for the current session
       shell: "{{ alias_command }}"
 
-    - name: Deactivate the virtual environment
-      shell: "deactivate"
+    # - name: Deactivate the virtual environment
+    #   shell: "deactivate"
