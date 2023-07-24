@@ -66,7 +66,7 @@
     user_name: "deeksha"
     environment_name: "env"
     project_path: "/home/{{user_name}}/adcuratio"
-    virtualenv_path: "/home/{{user_name}}/setup-automation/adcuratio/{{env}}"
+    virtualenv_path: "/home/{{user_name}}/setup-automation/adcuratio/{{environment_name}}"
     alias_command: "alias adc='export SERVER_NAME=MASTER && export SERVER_DESC=MASTER && export DEBUG=true && export OPERATOR_ID=1 && source {{ virtualenv_path }}/bin/activate && cd {{ project_path }}/core-backend/'"
 
   tasks:
