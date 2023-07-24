@@ -1,0 +1,120 @@
+# - name: Create and set up Python Virtual Environment
+#   hosts: all
+#   gather_facts: false
+#   become: yes
+#   become_method: sudo
+#   vars:
+#     ansible_become_password: pass
+
+#     user_name: "deeksha"
+#     environment_name: "env"
+#     project_path: "/home/{{ deeksha }}/adcuratio"
+#     virtualenv_path: "{{ project_path }}/{{ environment_name }}"
+#     alias_command: "alias adc='export SERVER_NAME=MASTER && export SERVER_DESC=MASTER && export DEBUG=true && export OPERATOR_ID=1 && source {{ virtualenv_path }}/bin/activate && cd {{ project_path }}/core-backend/'"
+
+#   tasks:
+#     - name: Install python3 and python3-pip
+#       apt:
+#         name:
+#           - python3
+#           - python3-pip
+#         state: present
+
+#     - name: Install virtualenv package
+#       pip:
+#         name: virtualenv
+#         state: present
+
+#     - name: Create the virtual environment using virtualenv
+#       command: "virtualenv {{ virtualenv_path }}"
+#       args:
+#         creates: "{{ virtualenv_path }}/bin/activate"
+
+#     - name: Activate the virtual environment
+#       shell: "source {{ virtualenv_path }}/bin/activate"
+
+#     # Install any required packages using pip within the virtual environment
+#     # For example, installing required dependencies:
+#     # - name: Install required dependencies inside the virtual environment
+#     #   pip:
+#     #     requirements: /path/to/requirements.txt
+
+#     - name: Add the alias to .bashrc
+#       lineinfile:
+#         path: "/home/{{ deeksha }}/.bashrc"
+#         line: "{{ alias_command }}"
+#         create: yes
+
+#     - name: Set the alias for the current session
+#       shell: "{{ alias_command }}"
+
+#     - name: Deactivate the virtual environment
+#       shell: "deactivate"
+
+# 
+
+
+# ---
+- name: Create and set up Python Virtual Environment
+  hosts: all
+  gather_facts: false
+  become: yes
+  become_method: sudo
+  vars:
+    ansible_become_password: pass
+    
+    user_name: "deeksha"
+    environment_name: "env"
+    project_path: "/home/{{deeksha }}/adcuratio"
+    virtualenv_path: "/home/{{deeksha }}/setup-automation/adcuratio/{{env}}"
+    alias_command: "alias adc='export SERVER_NAME=MASTER && export SERVER_DESC=MASTER && export DEBUG=true && export OPERATOR_ID=1 && source {{ virtualenv_path }}/bin/activate && cd {{ project_path }}/core-backend/'"
+
+  tasks:
+    - name: Install python3-pip package
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install virtualenv package
+      pip:
+        name: virtualenv
+        state: present
+
+    - name: Install python3 and python3-pip
+      apt:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Create the virtual environment using virtualenv
+      command: "virtualenv {{ virtualenv_path }}"
+      args:
+        creates: "{{ virtualenv_path }}/bin/activate"
+
+    # Alternatively, you can use Python's venv module:
+    # - name: Create the virtual environment using Python's venv
+    #   command: "python3 -m venv {{ virtualenv_path }}"
+    #   args:
+    #     creates: "{{ virtualenv_path }}/bin/activate"
+
+    - name: Activate the virtual environment
+      shell: "source {{ virtualenv_path }}/bin/activate"
+
+    # Install any required packages using pip within the virtual environment
+    # For example, installing required dependencies:
+    # - name: Install required dependencies inside the virtual environment
+    #   pip:
+    #     requirements: /path/to/requirements.txt
+
+    - name: Add the alias to .bashrc
+      lineinfile:
+        path: "/home/{{ user_name }}/.bashrc"
+        line: "{{ alias_command }}"
+        create: yes
+
+    - name: Set the alias for the current session
+      shell: "{{ alias_command }}"
+
+    - name: Deactivate the virtual environment
+      shell: "deactivate"
