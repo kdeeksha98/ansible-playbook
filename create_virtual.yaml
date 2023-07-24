@@ -53,6 +53,8 @@
 
 # 
 
+
+# ---
 - name: Create and set up Python Virtual Environment
   hosts: all
   gather_facts: false
@@ -68,8 +70,13 @@
     alias_command: "alias adc='export SERVER_NAME=MASTER && export SERVER_DESC=MASTER && export DEBUG=true && export OPERATOR_ID=1 && source {{ virtualenv_path }}/bin/activate && cd {{ project_path }}/core-backend/'"
 
   tasks:
-    - name: Install virtualenv package
+    - name: Install python3-pip package
       apt:
+        name: python3-pip
+        state: present
+
+    - name: Install virtualenv package
+      pip:
         name: virtualenv
         state: present
 
