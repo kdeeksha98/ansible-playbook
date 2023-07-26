@@ -21,18 +21,40 @@
 #     - name: Install Python dependencies from requirements.txt
 #       pip:
 #         requirements: "{{ project_path }}/requirements.txt"
- - name: Install Python dependencies from requirements.txt
-   hosts: all
-   gather_facts: false
+#  - name: Install Python dependencies from requirements.txt
+#    hosts: all
+#    gather_facts: false
 
-   tasks:
+#    tasks:
+#     - name: Copy requirements.txt to remote host
+#       copy:
+#         src: "requirement.txt"  # Assuming the requirements.txt file is in the same directory as the playbook
+#         dest: "/home/deeksha/setup-automation/adcuratio/requirements.txt"  # Path to the destination on the remote host
+#         remote_src: yes  # This option indicates that the file exists on the remote host
+#         mode: "0644"     # Set the correct file permissions for the copied file
+
+#     - name: Install Python dependencies from requirements.txt
+#       pip:
+#         requirements: "/home/deeksha/setup-automation/adcuratio/requirements.txt"
+# 
+- name: Copy requirements.txt to remote host
+  hosts: all
+  gather_facts: false
+  become: yes
+  vars:
+    ansible_become_password: pass
+    user_name: "deeksha"
+    project_path: "/home/{{ user_name }}/setup-automation/adcuratio"
+    local_requirements_file: "/home/deeksha/setup-automation/ansible-playbook/requirements.txt"
+    remote_requirements_file: "{{ project_path }}/requirements.txt"
+
+  tasks:
     - name: Copy requirements.txt to remote host
       copy:
-        src: "requirement.txt"  # Assuming the requirements.txt file is in the same directory as the playbook
-        dest: "/home/deeksha/setup-automation/adcuratio/requirements.txt"  # Path to the destination on the remote host
-        remote_src: yes  # This option indicates that the file exists on the remote host
-        mode: "0644"     # Set the correct file permissions for the copied file
+        src: "{{ local_requirements_file }}"
+        dest: "{{ remote_requirements_file }}"
+        mode: "0644"
 
     - name: Install Python dependencies from requirements.txt
       pip:
-        requirements: "/home/deeksha/setup-automation/adcuratio/requirements.txt"
+        requirements: "{{ remote_requirements_file }}"
