@@ -1,4 +1,4 @@
-# alabaster
+alabaster
 amqp
 anyjson
 appdirs
@@ -14,7 +14,7 @@ bitarray
 blinker
 boto3
 cached-property
-celery   #4.3.0
+celery==4.3.0
 certifi
 cffi
 chardet
