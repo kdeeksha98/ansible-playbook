@@ -49,9 +49,9 @@
     # project_path: "/home/{{ user_name }}/setup-automation/adcuratio"
     # local_requirements_file: "/home/ubuntu/my_ansible/ansible-playbook/requirements.txt"
     # remote_requirements_file: "{{ project_path }}/requirements.txt"
-    user_name: "deeksha"
-    project_path: "/home/deeksha/setup-automation/adcuratio/core-backend"
-    local_requirements_file: "/home/deeksha/setup-automation/ansible-playbook/requirements.txt"
+    user_name: "ubuntu"
+    project_path: "/home/ubuntu/ansible-playbook/adcuratio/core-backend"
+    local_requirements_file: "/home/ubuntu/ansible-playbook/requirements.txt"
     remote_requirements_file: "{{ project_path }}/requirements.txt"
   tasks:
     - name: Copy requirements.txt to remote host
