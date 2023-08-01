@@ -1,63 +1,60 @@
-
 - name: Download and Replace Files
   hosts: all
   gather_facts: false
   tasks:
-    # Add the tasks to download and replace files here...
+        
 
     - name: Replace configurations.py
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/configurations.py"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/configurations.py"
         dest: "/home/ubuntu/adcuratio/core-backend/engine/configurations.py"
       delegate_to: localhost
 
     - name: Replace swap_generation.py
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/swap_generation.py"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/swap_generation.py"
         dest: "/home/ubuntu/adcuratio/core-backend/engine/swap/swap_generation.py"
       delegate_to: localhost
 
     - name: Replace constants.py
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/constants.py"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/constants.py"
         dest: "/home/ubuntu/adcuratio/core-backend/report/constants.py"
       delegate_to: localhost
 
     - name: Replace supervisord.conf
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/supervisord.conf"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/supervisord.conf"
         dest: "/home/ubuntu/adcuratio/core-backend/supervisord.conf"
       delegate_to: localhost
 
     - name: Replace epsilon_experian_scripts directory
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/epsilon_experian_scripts"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/epsilon_experian_scripts"
         dest: "/home/ubuntu/adcuratio/core-backend/refresh/epsilon_experian_scripts"
         remote_src: yes
       delegate_to: localhost
 
     - name: Copy local_configurations.py to engine directory
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/local_configurations.py"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/local_configurations.py"
         dest: "/home/ubuntu/adcuratio/core-backend/engine/local_configurations.py"
       delegate_to: localhost
 
     - name: Copy local_configurations_slave1.py to engine directory
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/local_configurations_slave1.py"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/local_configurations_slave1.py"
         dest: "/home/ubuntu/adcuratio/core-backend/engine/local_configurations_slave1.py"
       delegate_to: localhost
 
     - name: Copy local_configurations_slave2.py to engine directory
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/local_configurations_slave2.py"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/local_configurations_slave2.py"
         dest: "/home/ubuntu/adcuratio/core-backend/engine/local_configurations_slave2.py"
       delegate_to: localhost
 
     - name: Copy local_settings.py to adcuratio directory
       copy:
-        src: "/home/deeksha/Downloads/Backup -20230801T081046Z-001/local_settings.py"
+        src: "/home/ubuntu/adcuratio/Downloads/Backup -20230801T081046Z-001/local_settings.py"
         dest: "/home/ubuntu/adcuratio/core-backend/adcuratio/local_settings.py"
       delegate_to: localhost
-
-   
