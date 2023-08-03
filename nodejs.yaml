@@ -25,3 +25,22 @@
         name: yarn
         state: present
         update_cache: yes
+
+- name: Install frontend dependencies and start the server
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Navigate to frontend folder
+      become: yes
+      become_user: "ubuntu"
+      command: cd /home/ubuntu/adcuratio/core-frontend/monolith/
+
+    - name: Install frontend dependencies
+      become: yes
+      become_user: "ubuntu"
+      command: yarn
+
+    - name: Start frontend server
+      become: yes
+      become_user: "ubuntu"
+      command: yarn start
