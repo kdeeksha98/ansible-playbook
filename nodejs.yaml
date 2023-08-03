@@ -1,30 +1,27 @@
-# - name: Install Node.js v16.x
-#   hosts: all
-#   become: yes
-#   tasks:
-#     - name: Add NodeSource repository
-#       apt_repository:
-#         repo: "deb https://deb.nodesource.com/node_16.x {{ ansible_distribution_release }} main"
-#         state: present
+---
+- name: Install Node.js and Yarn
+  hosts: all
+  become: yes
+  tasks:
+    - name: Add NodeSource GPG key
+      apt_key:
+        url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+        state: present
 
-#     - name: Install Node.js
-#       apt:
-#         name: nodejs
-#         state: latest
-#         update_cache: yes
-- name: Add NodeSource GPG key
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
+    - name: Add NodeSource repository
+      apt_repository:
+        repo: "deb https://deb.nodesource.com/node_16.x {{ ansible_distribution_release }} main"
+        state: present
+        update_cache: yes
 
-- name: Add NodeSource repository
-  apt_repository:
-    repo: "deb https://deb.nodesource.com/node_16.x {{ ansible_distribution_release }} main"
-    state: present
-    update_cache: yes
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
 
-- name: Install Node.js
-  apt:
-    name: nodejs
-    state: present
-    update_cache: yes
+    - name: Install Yarn
+      apt:
+        name: yarn
+        state: present
+        update_cache: yes
