@@ -1,0 +1,17 @@
+- name: Edit .env file
+  hosts: all
+  become: yes
+  tasks:
+    - name: Replace REACT_APP_BACKEND in .env
+      lineinfile:
+        path: /home/<user-name>/adcuratio/core-frontend/monolith/.env
+        regexp: '^REACT_APP_BACKEND='
+        line: 'REACT_APP_BACKEND=http://your-backend-server'
+        state: present
+
+    - name: Replace REACT_APP_BACKEND_PORT in .env
+      lineinfile:
+        path: /home/<user-name>/adcuratio/core-frontend/monolith/.env
+        regexp: '^REACT_APP_BACKEND_PORT='
+        line: 'REACT_APP_BACKEND_PORT=8080'
+        state: present
