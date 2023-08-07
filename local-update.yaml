@@ -7,18 +7,18 @@
 
   tasks: 
 
-  # - name: Update package
-  #   apt:
-  #     update_cache: yes
+  - name: Update package
+    apt:
+      update_cache: yes
 
-  # - name: upgrade package
-  #   apt:
-  #     upgrade: dist
+  - name: upgrade package
+    apt:
+      upgrade: dist
 
-  # - name: install ffmpeg
-  #   apt:
-  #     name: ffmpeg
-  #     state: present
+  - name: install ffmpeg
+    apt:
+      name: ffmpeg
+      state: present
 
   - name: ffmpeg version
     command: ffmpeg -version | grep ffmpeg
