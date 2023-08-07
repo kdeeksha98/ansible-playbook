@@ -1,7 +1,8 @@
 ---
-- name: Install Node.js and Yarn
-  hosts: all
+- name: Setup and Run Frontend
+  hosts: your_target_host  # Replace with your target hosts or group
   become: yes
+
   tasks:
     - name: Add NodeSource GPG key
       apt_key:
@@ -14,33 +15,38 @@
         state: present
         update_cache: yes
 
-    - name: Install Node.js
+    - name: Install Node.js and Yarn
       apt:
-        name: nodejs
+        name: "{{ item }}"
         state: present
         update_cache: yes
+      loop:
+        - nodejs
+        - yarn
 
-    - name: Install Yarn
-      apt:
-        name: yarn
-        state: present
-        update_cache: yes
-
-- name: Install frontend dependencies and start the server
-  hosts: localhost
-  gather_facts: false
-  tasks:
     - name: Navigate to frontend folder
-      become: yes
-      become_user: "ubuntu"
-      command: cd /home/ubuntu/adcuratio/core-frontend/monolith/
+      become_user: ubuntu
+      shell: cd /home/ubuntu/adcuratio/core-frontend/monolith/
 
     - name: Install frontend dependencies
-      become: yes
-      become_user: "ubuntu"
-      command: yarn
+      become_user: ubuntu
+      shell: yarn
 
     - name: Start frontend server
-      become: yes
-      become_user: "ubuntu"
-      command: yarn start
+      become_user: ubuntu
+      shell: yarn start
+
+    - name: Remove cmdtest and yarn
+      become_user: root
+      apt:
+        name: "{{ item }}"
+        state: absent
+        purge: yes
+      loop:
+        - cmdtest
+        - yarn
+
+    - name: Install yarn using npm
+      become_user: root
+      shell: npm install -g yarn
+...
