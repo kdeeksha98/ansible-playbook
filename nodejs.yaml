@@ -1,52 +1,20 @@
 ---
-- name: Setup and Run Frontend
-  hosts: your_target_host  # Replace with your target hosts or group
-  become: yes
+- name: Install Yarn and Start Frontend
+  hosts: all
+  become: yes  # This is required to use sudo
 
   tasks:
-    - name: Add NodeSource GPG key
-      apt_key:
-        url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-        state: present
-
-    - name: Add NodeSource repository
-      apt_repository:
-        repo: "deb https://deb.nodesource.com/node_16.x {{ ansible_distribution_release }} main"
-        state: present
-        update_cache: yes
-
-    - name: Install Node.js and Yarn
+    - name: Remove cmdtest
       apt:
-        name: "{{ item }}"
-        state: present
-        update_cache: yes
-      loop:
-        - nodejs
-        - yarn
-
-    - name: Navigate to frontend folder
-      become_user: ubuntu
-      shell: cd /home/ubuntu/adcuratio/core-frontend/monolith/
-
-    - name: Install frontend dependencies
-      become_user: ubuntu
-      shell: yarn
-
-    - name: Start frontend server
-      become_user: ubuntu
-      shell: yarn start
-
-    - name: Remove cmdtest and yarn
-      become_user: root
-      apt:
-        name: "{{ item }}"
+        name: cmdtest
         state: absent
-        purge: yes
-      loop:
-        - cmdtest
-        - yarn
 
-    - name: Install yarn using npm
+    - name: Remove yarn
+      apt:
+        name: yarn
+        state: absent
+
+    - name: Install Yarn using npm
+      command: npm install -g yarn
       become_user: root
-      shell: npm install -g yarn
-...
+
