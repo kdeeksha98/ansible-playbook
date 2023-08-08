@@ -58,6 +58,7 @@
     - name: Check Redis service status
       command: systemctl status redis-server
       register: redis_status
-   
-    - debug:
-      var: redis_status.stdout_lines
+
+    - name: Display Redis service status
+      debug:
+        var: redis_status.stdout_lines

@@ -1,8 +1,16 @@
-- hosts: all
+
+- name: Clone a github repository
+  hosts: all
   tasks:
-  - name: Clone a github repository
-    git:
-      repo: https://github.com/adcuratio/core-backend/
-      dest: "/home/ubuntu/adcuratio/core-backend/"
-      clone: yes
-      update: yes
+    - name: Stash local changes
+      command: git stash
+      args:
+        chdir: /home/ubuntu/adcuratio/core-backend/
+      ignore_errors: yes
+
+    - name: Clone or update the repository
+      git:
+        repo: https://github.com/adcuratio/core-backend/
+        dest: "/home/ubuntu/adcuratio/core-backend/"
+        clone: yes
+        update: yes
