@@ -21,11 +21,12 @@
 
     - name: Copy Redis configuration file
       copy:
-        src: redis.conf
+        src: /etc/redis/redis.conf
         dest: /etc/redis/redis.conf
         owner: root
         group: root
         mode: '0644'
+        remote_src: yes
 
     - name: Set Redis password in configuration file
       lineinfile:
